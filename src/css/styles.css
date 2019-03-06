@@ -1,1 +1,502 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+html {
+  font-family: system-ui, Arial, sans-serif;
+  font-size: 16px;
+}
+
+body {
+  background: darkgrey;
+}
+/* svg {
+  height: 100%;
+} */
+/* button {
+  width: 3em;
+  height: 1.5em;
+  background: red
+} */
+
+input, button {
+  border: none;
+  outline: none;
+}
+/* ========== Background styling ========== */
+
+#bg-lab {
+  height: calc(25vh + 5vw);
+  /* background: green; */
+  position: fixed;
+  width: 100vw;
+  bottom: 0;
+  z-index: 100;
+  --table-height: 2.5rem;
+}
+
+#bg-lab::after {
+  content: '';
+  display: block;
+  position: absolute;
+  background: lightgrey;
+  width: 100vw;
+  height: var(--table-height);
+  bottom: 0;
+}
+
+/* ========== General potion styling ========== */
+
+.background-asset {
+  position: absolute;
+  bottom: var(--table-height);
+}
+
+.background-potion,  {
+  height: calc(90% - var(--table-height));
+}
+
+.potion {
+  height: 100%;
+}
+
+.potion-reflection,
+.bubble-reflection {
+  fill: white;
+  opacity: .7;
+}
+
+.potion-glass {
+  fill: white;
+  opacity: .5;
+}
+
+.potion-connector,
+.rack {
+  fill: #737372;
+}
+
+.potion-fluid,
+.potion-bubbles,
+.potion-tube {
+  fill: var(--potion-color);
+  transition: fill .3s ease 1s;
+}
+
+.bubble {
+  animation: bubbling 1s infinite linear var(--bubble-delay);
+}
+
+@keyframes bubbling {
+  0% {
+    transform: scale(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* ========== Main potion styling ========== */
+
+#main-potion {
+  display: flex;
+  width: 25vh;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 100;
+  padding-bottom: 0;
+  height: calc(100% - var(--table-height));
+  transition: padding-bottom .2s ease;
+  --potion-color: #00a0e4;
+  --potion-filled: 0.1;
+}
+
+#main-potion:hover {
+  padding-bottom: 1rem;
+  cursor: pointer;
+}
+
+#main-potion:active {
+  animation: shake .2s infinite linear;
+}
+
+/* #main-potion .potion {
+
+} */
+
+#main-potion:hover .potion {
+  transform-origin: top center;
+  animation: shake .5s infinite linear .3s, colorChange 1s alternate infinite ease .5s;
+}
+
+#main-potion .potion-fluid,
+#main-potion .potion-bubbles {
+  clip-path:url(#main-potion-glass-clip);
+}
+#main-potion .potion-fluid,
+#main-potion .potion-bubbles {
+
+}
+
+#main-potion .potion-fluid path {
+  transition: transform .3s ease .8s;
+  transform-origin: bottom center;
+  transform: scaleY(var(--potion-filled));
+}
+
+#main-potion .bubble {
+  transform-origin: center bottom;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg) }
+  25% { transform: rotate(-30deg) }
+  75% { transform: rotate(30deg) }
+  100% { transform: rotate(0deg) }
+}
+
+@keyframes colorChange {
+  0% { --potion-color: #00a0e4}
+  50% { --potion-color: #00e488}
+  100% { --potion-color: #e4e400}
+}
+
+/* ========== Background potion styling ========== */
+
+.background-potion {
+  left: 0;
+  height: calc(90% - var(--table-height));
+}
+
+.background-potion .potion {
+  --potion-color: #fff538;
+}
+
+.background-potion:hover .potion {
+  --potion-color: orange;
+}
+
+.background-potion:hover .bubble {
+  animation-duration: .5s;
+}
+
+.background-potion .potion-bubbles {
+  clip-path:url(#background-potion-glass-clip);
+}
+
+.background-potion .bubble {
+  transform-origin: 80% bottom;
+}
+
+/* =====a=we=fa=wef=awf=aw= */
+
+.background-tubes {
+  right: calc(50vw - 40vmax);
+  z-index: 1;
+  height: calc(60% - var(--table-height));
+}
+
+.test-tubes {
+  transform-origin: center bottom;
+  transform: scale(.9);
+}
+
+.test-tube:nth-child(1) {
+  --potion-color: #00a0e4;
+}
+
+.test-tube:nth-child(2) {
+  --potion-color: #38ad6a;
+}
+
+.test-tube:nth-child(3) {
+  --potion-color: #e9532a;
+}
+
+.test-tube:nth-child(4) {
+  --potion-color: #ffee00;
+}
+
+.test-tube:nth-child(5) {
+  --potion-color: #d72157;
+}
+
+.test-tube {
+  transition: transform .1s ease-in-out;
+}
+
+.test-tube:hover {
+  transform: translateY(-10%);
+}
+
+
+.background-bottles {
+  position: absolute;
+  bottom: var(--table-height);
+  left: calc(50vmin - 10vmin);
+  height: calc(70% - var(--table-height));
+}
+
+.background-bottles .bottle {
+  transition: transform .1s ease-in-out;
+}
+.background-bottles .bottle:hover {
+  transform: translateY(20%)
+}
+
+.background-bottles .bottle:nth-of-type(2) {
+  --potion-color: #38ad6a;
+}
+.background-bottles .bottle:nth-of-type(3) {
+  --potion-color: #d72157;
+}
+.background-bottles .bottle:nth-of-type(4) {
+  --potion-color: #00a0e4;
+}
+.background-bottles .bottle:nth-of-type(5) {
+  --potion-color: #e9532a;
+}
+.background-bottles .bottle:nth-of-type(6) {
+  --potion-color: limegreen;
+}
+
+.background-books {
+  /* --books-height: calc(25vh + 5vw); */
+  height: calc(80% - var(--table-height));
+  right: calc(10vmin);
+}
+.background-books .potion {
+  width: 200%;
+}
+
+.background-books .book {
+  transform-origin: bottom left;
+  transition: transform .15s ease-in;
+}
+.background-books:hover .book:first-of-type {
+  transform: rotate(-90deg)
+}
+
+
+/* Explosion */
+
+#explosion {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: content-box;
+  padding-top: 50vh;
+  --explosion-duration: .4s;
+  --final-size: 5;
+  z-index: 1000;
+}
+
+#explosion.explode {
+  display: block;
+}
+.explosion-fase {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom:0;
+  margin: auto;
+  position: absolute;
+  transform: scale(0);
+}
+.fase-1 {
+  fill: #ffee00;
+  animation-name: fase-1;
+  animation-fill-mode: forwards;
+  animation-duration: var(--explosion-duration);
+  animation-timing-function: linear;
+}
+
+@keyframes fase-1 {
+  0% {
+    transform: scale(0)
+  }
+  50% {
+    transform: scale(.5)
+  }
+  100% {
+    transform: scale(var(--final-size))
+  }
+}
+
+.fase-2 {
+  fill: #e9532a;
+  animation-name: fase-2;
+  animation-fill-mode: forwards;
+  animation-duration: var(--explosion-duration);
+  animation-timing-function: linear;
+  animation-delay: calc(var(--explosion-duration) / 2);
+
+}
+
+@keyframes fase-2 {
+  0% {
+    transform: scale(0)
+  }
+  100% {
+    transform: scale(var(--final-size))
+  }
+}
+
+
+.fase-3 {
+  animation-name: fase-3;
+  animation-fill-mode: forwards;
+  animation-duration: var(--explosion-duration);
+  animation-timing-function: linear;
+  animation-delay: calc(var(--explosion-duration));
+}
+.fase-3 .fase-3-inner {
+  fill: #ffda00;
+}
+
+.fase-3 .fase-3-outer {
+  fill: #ffee00;
+}
+
+
+@keyframes fase-3 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(var(--final-size));
+  }
+}
+
+#add-words {
+  width: 50vw;
+  min-width: 310px;;
+  max-width: 500px;
+  background: #2b2b2a;
+  border-radius: 25px;
+  margin: 0 auto;
+  position: relative;
+}
+
+#add-words form {
+  width: 100%;
+  height: 100%;
+  padding: 10% 5% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#add-words form input {
+  width: 100%;
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+  height: 2em;
+  margin-bottom: .5em;
+  padding: 0 .25em;
+  border-radius: 5px;
+  background: black;
+  color: limegreen;
+  letter-spacing: .05em
+}
+
+#add-words form button {
+  font-size: 2rem;
+  padding: .25em .5em;
+  border-radius: 100px;
+  font-weight: medium;
+  margin-bottom: .5em;
+  position: relative;
+  background: #00a0e4;
+  color: white;
+}
+#add-words::after {
+  content: '';
+  display: block;
+  position: absolute;
+  /* background: lightgrey; */
+  height: 2rem;
+  width: 30%;
+  bottom: -2rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background: linear-gradient(to right, rgba(50,50,50,1) 0%,rgba(139,139,139,1) 50%,rgba(50,50,50,1) 100%);
+  border-radius: 0 0 15px 15px;
+}
+
+#add-words::before {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 1.5rem;
+  width: 1.5rem;
+  bottom: -3.5rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background: linear-gradient(to right, rgba(110,110,110,1) 0%,rgba(139,139,139,1) 50%,rgba(110,110,110,1) 100%);
+}
+#add-words .ingredient {
+  --ingredient-color: limegreen;
+  --fall-speed: 1s;
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 100% 0 100% 100%;
+  transform: rotate(-45deg);
+  background: var(--ingredient-color);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  z-index: -1;
+  animation-name: fallInBottle;
+  animation-duration: var(--fall-speed);
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+}
+
+#add-words .ingredient::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--ingredient-color);
+  top: -10px;
+  right: -10px;
+  border-radius: 100% 0 100% 100%;
+}
+
+#add-words .ingredient::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--ingredient-color);
+  top: -15px;
+  right: -15px;
+  border-radius: 100% 0 100% 100%;
+}
+
+@keyframes fallInBottle {
+  0% { bottom: 0 }
+  100% { bottom: -100vh }
+}
