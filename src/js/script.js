@@ -74,6 +74,7 @@
 
 
   function updatePotionContent(color) {
+    // const potion = mainPotion.querySelector(".potion");
     let currentContents = Number(getComputedStyle(mainPotion).getPropertyValue("--potion-filled"));
     let newContents = currentContents + .05;
     // console.log(currentColor)
@@ -89,8 +90,6 @@
 
     if (!word.value) return;
 
-
-
     queryComposer.words.push(word.value);
 
     word.value = ""; // Reset the input
@@ -105,7 +104,7 @@
     // console.log(randomColor)
 
 
-    e.target.parentElement.appendChild(ingredient);
+    e.target.appendChild(ingredient);
 
     setTimeout(() => {
       ingredient.remove();
@@ -120,12 +119,60 @@
   // Add genre
   function submitGenre(e) {
     // e.preventDefault();
-    const genre = e.currentTarget.dataset["genre"];
+    console.log(e.currentTarget)
+    const el = e.currentTarget;
+    const time = 500;
+    const clone = el.cloneNode(true);
+    const cloneLeft = el.getBoundingClientRect().left;
+    const cloneTop = el.getBoundingClientRect().top;
+    const cloneWidth = el.offsetWidth;
+
+
+
+    console.log(cloneLeft, cloneWidth)
+    clone.style.position = "fixed";
+    clone.style.setProperty("--clone-width", `${cloneWidth}px`)
+    clone.style.setProperty("--clone-left", `${cloneLeft}px`)
+    clone.style.setProperty("--clone-top", `${cloneTop}px`)
+    clone.style.setProperty("--fly-speed", `${time / 1000}s`)
+    clone.classList.add("flyInBottle");
+
+    setTimeout(() => {
+      clone.style.setProperty("--clone-left", `calc(50vw - var(--clone-width) / 2)`)
+      clone.style.setProperty("--clone-top", `100vh`)
+    }, 1)
+
+    setTimeout(() => {
+
+      el.remove()
+      console.log("remove")
+    }, time * 5)
+    
+    document.body.appendChild(clone)
+
+    const genre = el.dataset["genre"];
     queryComposer.genres.push(genre);
     console.log(genre)
+
+    const previousEl = el.previousElementSibling;
+    const nextEl = el.nextElementSibling;
+
+    if (!previousEl || el.classList.contains("is-first")) {
+      el.nextElementSibling.style.marginLeft = "0px"
+      el.nextElementSibling.classList.add("is-first")
+    }
+
+    if (!nextEl || el.classList.contains("is-last")) {
+      el.previousElementSibling.style.marginRight = "0px"
+      el.previousElementSibling.classList.add("is-last")
+    }
+
+    el.classList.add("is-hidden")
   }
 
   for (let i = 0; i < addGenre.length; i++) {
     addGenre[i].addEventListener("click", submitGenre);
   }
+
+
 })();

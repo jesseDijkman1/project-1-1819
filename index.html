@@ -8,34 +8,35 @@
   <script src="src/js/index.js" type="module"></script>
   <link rel="stylesheet" href="src/css/styles.css">
   <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Oba app</title>
 
 <body>
-  <main>
+  <main id="search-sections">
     <section id="add-words">
       <form>
-        <input type="text" placeholder="Waar wil je over lezen?">
+        <input type="text" placeholder="Waar wil je over lezen?" required>
         <button type="submit">Voeg toe</button>
       </form>
     </section>
     <section id="add-genres">
       <ul>
-        <li data-genre="humor">
+        <li class="genre-card" data-genre="humor">
           <h1>Humor</h1>
         </li>
-        <li data-genre="kinderleven">
+        <li class="genre-card" data-genre="kinderleven">
           <h1>Kinderleven</h1>
         </li>
-        <li data-genre="dieren">
+        <li class="genre-card" data-genre="dieren">
           <h1>Dieren</h1>
         </li>
-        <li data-genre="school">
+        <li class="genre-card" data-genre="school">
           <h1>School</h1>
         </li>
-        <li data-genre="science-fiction">
+        <li class="genre-card" data-genre="science-fiction">
           <h1>Science-fiction</h1>
         </li>
-        <li data-genre="stripverhaal">
+        <li class="genre-card" data-genre="stripverhaal">
           <h1>Stripverhaal</h1>
         </li>
       </ul>
