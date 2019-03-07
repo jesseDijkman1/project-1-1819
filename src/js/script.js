@@ -65,13 +65,33 @@
     	const stream = await api.createStream(`search/${query}&facet=Doelgroep(ageYouth)`);
       //
     	stream
-    		.pipe(handleData)
+    		.pipe(renderData)
     		.catch(console.error);
     }
   }
 
-  function handleData(data) {
-    console.log(data)
+  function renderData(data) {
+    const container = document.querySelector("#api-results .content");
+
+    data.forEach(d => {
+      console.log(d)
+      const template = `
+      <article>
+        <div class="img-container">
+          <img src="${d.images[0]}">
+        </div>
+        <section>
+          <h1>${d.title.full}</h1>
+          <h2>${d.author.fullname}</h2>
+          <p>${d.summary || "Geen omschrijving"}</p>
+        </section>
+      </article>`;
+
+      container.innerHTML += template;
+    })
+
+    app.loader("none");
+    console.log("test",data)
   }
 
   function changeSection(e) {
@@ -94,7 +114,7 @@
 
         clearInterval(window.mouseHoldDown)
         // API call
-        queryComposer.makeQuery().then(queryComposer.makeCall)
+        app.changeHash("results");
       }
     }, 100)
 
@@ -217,12 +237,22 @@
 
   const router = {
     search: function() {
+      document.body.className = "";
+    },
+    results: function() {
+      queryComposer.makeQuery().then(queryComposer.makeCall)
+      app.loader("flex");
+      document.body.className = "results";
 
     }
   }
+
   routie({
     "search": (category, page) => {
-      router.home(category, page);
+      router.search(category, page);
+    },
+    "results": (category, page) => {
+      router.results(category, page);
     }
   });
 
