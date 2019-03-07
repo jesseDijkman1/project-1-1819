@@ -8,24 +8,32 @@
   <script src="src/js/index.js" type="module"></script>
   <link rel="stylesheet" href="src/css/styles.css">
   <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Slackey" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Oba app</title>
 
 <body>
   <main id="search-sections">
     <section id="add-words">
+      <button class="change-section right">Genres</button>
+      <h1>Voeg woorden toe!</h1>
       <form>
         <input type="text" placeholder="Waar wil je over lezen?" required>
         <button type="submit">Voeg toe</button>
       </form>
     </section>
     <section id="add-genres">
+      <button class="change-section left">Woorden</button>
+      <h1>Voeg genres toe!</h1>
       <ul>
         <li class="genre-card" data-genre="humor">
           <h1>Humor</h1>
         </li>
-        <li class="genre-card" data-genre="kinderleven">
-          <h1>Kinderleven</h1>
+        <li class="genre-card" data-genre="sprookjes">
+          <h1>Sprookjes</h1>
+        </li>
+        <li class="genre-card" data-genre="sport">
+          <h1>Sport</h1>
         </li>
         <li class="genre-card" data-genre="dieren">
           <h1>Dieren</h1>
@@ -40,6 +48,9 @@
           <h1>Stripverhaal</h1>
         </li>
       </ul>
+    </section>
+    <section id="api-results">
+
     </section>
   </main>
   <div id="bg-lab">

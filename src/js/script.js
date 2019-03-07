@@ -1,12 +1,35 @@
 
 (() => {
+  const app = {
+    // First called function when page is loaded, checks the current hash and changes it if needed
+    init: () => {
+      let hash = window.location.hash || undefined;
+
+      // If there's no hash, change it to default (#home/characters/1)
+      if (!hash) {
+        window.location.hash = "#search";
+      }
+    },
+    // Quicker way to change the window location with javascript
+    changeHash: newHash => window.location.hash = newHash,
+    // Loader for the users, takes CSS display value as parameter ("none" and "flex")
+    loader: display => {
+      document.getElementById("loader").style.display = display;
+    }
+  }
+  app.init()
+
   const bubbles = document.getElementsByClassName("bubble");
   const explosion = document.getElementById("explosion");
   const mainPotion = document.getElementById("main-potion");
   const addWord = document.querySelector("#add-words form");
   const addGenre = document.querySelectorAll("#add-genres li[data-genre]");
   const randomColors = ["#00a0e4", "#38ad6a", "#e9532a", "#ffee00", "#d72157"];
+  const changeSectionBtn = document.getElementsByClassName("change-section");
 
+  for (let i = 0; i < changeSectionBtn.length; i++) {
+    changeSectionBtn[i].addEventListener("click", changeSection);
+  }
 
   for (let i = 0; i < bubbles.length; i++) {
     bubbles[i].style.setProperty("--bubble-delay", randomTime(1, 3, true));
@@ -49,6 +72,14 @@
 
   function handleData(data) {
     console.log(data)
+  }
+
+  function changeSection(e) {
+    if (e.target.classList.contains("right")) {
+      document.body.classList.add("genres");
+    } else {
+      document.body.classList.remove("genres")
+    }
   }
 
   // After holding the mainPotion down after 2 seconds
@@ -118,6 +149,12 @@
 
   // Add genre
   function submitGenre(e) {
+    let hiddenEl = document.querySelector(".is-hidden");
+
+    if (hiddenEl) {
+      hiddenEl.remove()
+    }
+
     // e.preventDefault();
     console.log(e.currentTarget)
     const el = e.currentTarget;
@@ -126,7 +163,7 @@
     const cloneLeft = el.getBoundingClientRect().left;
     const cloneTop = el.getBoundingClientRect().top;
     const cloneWidth = el.offsetWidth;
-
+    const cloneColor = getComputedStyle(el).getPropertyValue("--card-color");
 
 
     console.log(cloneLeft, cloneWidth)
@@ -135,6 +172,8 @@
     clone.style.setProperty("--clone-left", `${cloneLeft}px`)
     clone.style.setProperty("--clone-top", `${cloneTop}px`)
     clone.style.setProperty("--fly-speed", `${time / 1000}s`)
+    clone.style.setProperty("--card-color", cloneColor);
+    clone.style.background = cloneColor;
     clone.classList.add("flyInBottle");
 
     setTimeout(() => {
@@ -147,8 +186,10 @@
       el.remove()
       console.log("remove")
     }, time * 5)
-    
+
     document.body.appendChild(clone)
+
+    updatePotionContent(cloneColor)
 
     const genre = el.dataset["genre"];
     queryComposer.genres.push(genre);
@@ -174,5 +215,15 @@
     addGenre[i].addEventListener("click", submitGenre);
   }
 
+  const router = {
+    search: function() {
+
+    }
+  }
+  routie({
+    "search": (category, page) => {
+      router.home(category, page);
+    }
+  });
 
 })();
