@@ -26,14 +26,10 @@
   const addGenre = document.querySelectorAll("#add-genres li[data-genre]");
   const randomColors = ["#00a0e4", "#38ad6a", "#e9532a", "#ffee00", "#d72157"];
   const changeSectionBtn = document.getElementsByClassName("change-section");
+  const searchList = document.getElementById("query-contents");
+  const queryContents = document.querySelectorAll("query-contents li");
 
-  for (let i = 0; i < changeSectionBtn.length; i++) {
-    changeSectionBtn[i].addEventListener("click", changeSection);
-  }
 
-  for (let i = 0; i < bubbles.length; i++) {
-    bubbles[i].style.setProperty("--bubble-delay", randomTime(1, 3, true));
-  }
 
   function randomTime(min, max, negative) {
     let n = Math.random() * ( max - min + 1) + min;
@@ -46,6 +42,39 @@
   const queryComposer = {
     words: [],
     genres: [],
+    delete: function(place, itm) {
+      place.find((d, index) => {
+        if (d == itm) {
+          place.splice(index, 1);
+        }
+      })
+      this.updateList()
+    },
+    updateList: function() {
+
+      let wordsList = document.getElementById("contents-words");
+      let genresList = document.getElementById("contents-genres");
+
+      wordsList.innerHTML = "";
+
+      this.words.forEach(w => {
+        let wordLi = document.createElement("LI");
+        let wordTxt = document.createTextNode(w)
+        wordLi.appendChild(wordTxt)
+        wordLi.addEventListener("click", () => this.delete(this.words, w))
+        wordsList.appendChild(wordLi)
+      })
+
+      genresList.innerHTML = "";
+
+      this.genres.forEach(g => {
+        let genreLi = document.createElement("LI");
+        let genreTxt = document.createTextNode(g);
+        genreLi.appendChild(genreTxt);
+        genreLi.addEventListener("click", () => this.delete(this.genres, g))
+        genresList.appendChild(genreLi);
+      })
+    },
     makeQuery: function() {
       return new Promise((resolve, reject) => {
         const queryWords = this.words.join("+") || "a" // "a" is the default word;
@@ -61,7 +90,7 @@
     	});
 
       // const query = await this.makeQuery();
-      console.log("query", query)
+      // console.log("query", query)
     	const stream = await api.createStream(`search/${query}&facet=Doelgroep(ageYouth)`);
       //
     	stream
@@ -74,20 +103,38 @@
     const container = document.querySelector("#api-results .content");
 
     data.forEach(d => {
-      console.log(d)
+      // console.log(d)
       const template = `
       <article>
         <div class="img-container">
-          <img src="${d.images[0]}">
+          <img src="${d.images[1] || d.images[0]}">
+          <button class="add-book">Voeg toe</button>
         </div>
         <section>
-          <h1>${d.title.full}</h1>
+          <span>
+          <h1 class="book-title">${d.title.full}</h1>
+          </span>
           <h2>${d.author.fullname}</h2>
-          <p>${d.summary || "Geen omschrijving"}</p>
         </section>
+
       </article>`;
 
+      // Don't think it's interesting for my target audience
+      // <h2>${d.author.fullname}</h2>
+      // <p>${d.summary || "Geen omschrijving"}</p>
+
       container.innerHTML += template;
+
+      const titles = document.getElementsByClassName("book-title");
+
+      for (let i = 0; i < titles.length; i++) {
+        let parentEl = titles[i].parentElement;
+
+        let titleWidth = titles[i].clientWidth;
+        console.log(parentEl.scrollWidth, titleWidth, titles[i].textContent)
+        titles[i].style.setProperty("--title-width", `${parentEl.scrollWidth}px`)
+        titles[i].style.setProperty("--carousel-speed", `${parentEl.scrollWidth / 100}s`)
+      }
     })
 
     app.loader("none");
@@ -123,6 +170,13 @@
 
   mainPotion.addEventListener("mousedown", holdMouse);
 
+  mainPotion.addEventListener("mouseover", () => {
+    searchList.classList.add("show")
+  })
+
+  mainPotion.addEventListener("mouseout", () => {
+    searchList.className = "";
+  })
 
   function updatePotionContent(color) {
     // const potion = mainPotion.querySelector(".potion");
@@ -142,6 +196,7 @@
     if (!word.value) return;
 
     queryComposer.words.push(word.value);
+    queryComposer.updateList()
 
     word.value = ""; // Reset the input
 
@@ -212,7 +267,9 @@
     updatePotionContent(cloneColor)
 
     const genre = el.dataset["genre"];
+
     queryComposer.genres.push(genre);
+    queryComposer.updateList()
     console.log(genre)
 
     const previousEl = el.previousElementSibling;
@@ -246,6 +303,15 @@
 
     }
   }
+
+  for (let i = 0; i < changeSectionBtn.length; i++) {
+    changeSectionBtn[i].addEventListener("click", changeSection);
+  }
+
+  for (let i = 0; i < bubbles.length; i++) {
+    bubbles[i].style.setProperty("--bubble-delay", randomTime(1, 3, true));
+  }
+
 
   routie({
     "search": (category, page) => {
